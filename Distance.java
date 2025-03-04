@@ -1,3 +1,7 @@
+// Dynamic programming implementation of the Levenshtein distance algorithm
+// based on https://www.geeksforgeeks.org/java-program-to-implement-levenshtein-distance-computing-algorithm/
+// Time complexity: O(m*n) where m is the length of str1 and n is the length of str2
+
 public class Distance {
     static int compute(String str1, String str2) {
         int[][] d = new int[str1.length() + 1][str2.length() + 1];
@@ -23,5 +27,5 @@ public class Distance {
     static int min(int a, int b, int c) {
         return Math.min(a, Math.min(b, c));
     }
-    
+
 }
