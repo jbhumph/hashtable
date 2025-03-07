@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class HashMap {
     private int size;
@@ -7,9 +8,9 @@ public class HashMap {
 
     private class Entry {
         String key;
-        String value;
+        int value;
 
-        public Entry(String key, String value) {
+        public Entry(String key, int value) {
             this.key = key;
             this.value = value;
         }
@@ -31,7 +32,7 @@ public class HashMap {
         return sum % 10;
     }
 
-    public void put(String key, String value) {
+    public void put(String key, int value) {
         int index = hashFunction(key);
         List<Entry> bucket = this.buckets.get(index);
         for (Entry entry : bucket) {
@@ -43,12 +44,23 @@ public class HashMap {
         bucket.add(new Entry(key, value));
     }
 
-    public String get(String key) {
+    public int get(String key) {
         int index = hashFunction(key);
         List<Entry> bucket = this.buckets.get(index);
         for (Entry entry : bucket) {
             if (entry.key.equals(key)) {
                 return entry.value;
+            }
+        }
+        return 0;
+    }
+
+    public String getID(String key) {
+        int index = hashFunction(key);
+        List<Entry> bucket = this.buckets.get(index);
+        for (Entry entry : bucket) {
+            if (entry.key.equals(key)) {
+                return entry.key;
             }
         }
         return null;
@@ -61,6 +73,14 @@ public class HashMap {
             if (entry.key.equals(key)) {
                 bucket.remove(entry);
                 return;
+            }
+        }
+    }
+
+    public void forEach(BiConsumer<String, Integer> action) {
+        for (List<Entry> bucket : buckets) {
+            for (Entry entry : bucket) {
+                action.accept(entry.key, entry.value);
             }
         }
     }

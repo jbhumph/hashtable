@@ -1,12 +1,12 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.HashMap;
+
 
 public class Main {
     public static void main(String[] args) {
         // create initial dictionary
-        HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
+        HashMap dictionary = new HashMap(100);
         File file = new File("./data/dictionary.txt");
         try {
             Scanner scanner = new Scanner(file);
@@ -21,14 +21,27 @@ public class Main {
         }
 
         // main program intro
-        System.out.println("Welcome to the Spell Checker program!");
-        System.out.println("Please enter a word to check if it is spelled correctly.");
+        drawLogo();
+        System.out.println("\n\n\nWelcome to the Spell Checker program!");
         Scanner scanner = new Scanner(System.in);
+        run(dictionary, file, scanner);
+        System.out.println("Check another word? (y/n)");
+        String response = scanner.nextLine();
+        while (response.equals("y") || response.equals("Y")) {
+            run(dictionary, file, scanner);
+            System.out.println("Check another word? (y/n)");
+            response = scanner.nextLine();
+        }
+        System.out.println("Thank you for using the Spell Checker program!\n\n");
+        scanner.close();
+    }
+
+    public static void run(HashMap dictionary, File file, Scanner scanner) {
+        System.out.println("\nPlease enter a word to check if it is spelled correctly.");
         String input = scanner.nextLine();
-        Integer result = dictionary.get(input);
+        String result = dictionary.getID(input);
         if (result == null) {
-            System.out.println("The word is spelled incorrectly.");
-            
+            System.out.println("\nThe word is spelled incorrectly.");
             String[] suggestions = new String[5];
             dictionary.forEach((k, v) -> {
                 int distance = Distance.compute(input, k);
@@ -54,11 +67,17 @@ public class Main {
             }
             System.out.println("\n");
         } else {
-            System.out.println("The word is spelled correctly.");
+            System.out.println("\nThe word is spelled correctly.");
         }
-        scanner.close();
+    }
 
-
-        
+    public static void drawLogo() {
+        System.out.println("\n\n\n");
+        System.out.println(" ______     ______   ______     __         __         ______     __  __     ______     ______     __  __   ");
+        System.out.println("/\\  ___\\   /\\  == \\ /\\  ___\\   /\\ \\       /\\ \\       /\\  ___\\   /\\ \\_\\ \\   /\\  ___\\   /\\  ___\\   /\\ \\/ /   ");
+        System.out.println("\\ \\___  \\  \\ \\  _-/ \\ \\  __\\   \\ \\ \\____  \\ \\ \\____  \\ \\ \\____  \\ \\  __ \\  \\ \\  __\\   \\ \\ \\____  \\ \\  _\"-.");
+        System.out.println(" \\/\\_____\\  \\ \\_\\    \\ \\_____\\  \\ \\_____\\  \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\");
+        System.out.println("  \\/_____/   \\/_/     \\/_____/   \\/_____/   \\/_____/   \\/_____/   \\/_/\\/_/   \\/_____/   \\/_____/   \\/_/\\/_/");
+        System.out.println("");
     }
 }
